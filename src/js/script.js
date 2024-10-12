@@ -6,7 +6,7 @@ const totalElement = document.getElementById("total");
 
 // Função para buscar os produtos da API
 async function fetchProducts() {
-    const response = await fetch('https://api.escuelajs.co/api/v1/products?offset=0&limit=20');
+    const response = await fetch('https://api.escuelajs.co/api/v1/products?offset=0&limit=11');
     const products = await response.json();
     displayProducts(products);
 }
