@@ -1,3 +1,6 @@
+* {
+    font-family: sans-serif;
+}
 body {
     font-family: Arial, sans-serif;
     background-color: #121212; /* Fundo escuro */
@@ -6,6 +9,28 @@ body {
     padding: 20px;
 }
 
+.navigation {
+    display: flex;
+    align-items: center;
+    padding: 7px;
+    gap: 60px;
+    background: #9b6cdb;
+    height: 4rem;
+    
+}
+
+.navigation a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    padding-bottom: 4px;
+    transition: all 0.5s ease-in-out;
+}
+
+.navigation a:hover {
+    border-bottom: 1px solid #fff;
+
+}
 
 #products {
     display: flex;
