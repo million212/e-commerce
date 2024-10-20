@@ -1,8 +1,6 @@
 // Variáveis globais
 let cart = [];
 const productsElement = document.getElementById("products");
-const cartElement = document.getElementById("cart");
-const totalElement = document.getElementById("total");
 
 // Função para buscar os produtos da API
 async function fetchProducts() {
@@ -29,62 +27,24 @@ function displayProducts(products) {
 
 // Adicionar item ao carrinho
 function addToCart(id, title, price) {
+
+    // Carregar o carrinho
+    let cart = JSON.parse(localStorage.getItem('carrinho'))
+
+    // Ferifica se o item existe no carrinho
     const existingItem = cart.find(item => item.id === id);
     if (existingItem) {
+    // Se existir aumente a quatidade
         existingItem.quantity++;
     } else {
+    // Se não existir, adicione um novo item ao carrinho
         cart.push({ id, title, price, quantity: 1 });
-        localStorage.setItem('carrrinho', JSON.stringify(cart))
     }
-    updateCart();
-}
-
-// Remover item do carrinho
-function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
-    updateCart();
-}
-
-// Atualizar o carrinho
-function updateCart() {
-    cartElement.innerHTML = '';
-    if (cart.length === 0) {
-        cartElement.innerHTML = '<p>Seu carrinho está vazio</p>';
-    } else {
-        cart.forEach(item => {
-            const formattedPrice = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price);
-            const cartItemDiv = document.createElement('div');
-            cartItemDiv.classList.add('cart-item');
-            cartItemDiv.innerHTML = `
-                <h4>${item.title}</h4>
-                <p>Quantidade: ${item.quantity}</p>
-                <p>Preço: ${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price * item.quantity)}</p>
-                <button onclick="removeFromCart(${item.id})">Remover</button>
-            `;
-            cartElement.appendChild(cartItemDiv);
-        });
-    }
-    calculateTotal();
-}
-
-// Calcular o total do carrinho
-function calculateTotal() {
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    totalElement.innerHTML = `Total: ${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}`;
-}
-
-function loadCart() {
-    const storedCart = JSON.parse(localStorage.getItem('carrinho'));
-    if (storedCart) {
-        cart = storedCart;
-    }
-    updateCart();
+    localStorage.setItem('carrinho', JSON.stringify(cart))
     
 }
-
 
 // Iniciar a aplicação
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts()
-    loadCart()
 })
