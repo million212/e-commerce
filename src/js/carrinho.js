@@ -16,14 +16,16 @@ function updateCart() {
         cartElement.innerHTML = '<p>Seu carrinho está vazio</p>';
     } else {
         cart.forEach(item => {
-            const formattedPrice = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price);
+            const formattedPrice = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price * item.quantity);
             const cartItemDiv = document.createElement('div');
             cartItemDiv.classList.add('cart-item');
             cartItemDiv.innerHTML = `
                 <h4>${item.title}</h4>
+                <div id="container"><img src="${item.image}" referrerpolicy="no-referrer"></div>
                 <p>Quantidade: ${item.quantity}</p>
-                <p>Preço: ${Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price * item.quantity)}</p>
-                <button onclick="removeFromCart(${item.id})">Remover</button>
+                <p>Preço: ${formattedPrice}</p>
+                <button onclick="decreaseQuantity(${item.id})">-</button>
+                <button onclick="increaseQuantity(${item.id})">+</button>
             `;
             cartElement.appendChild(cartItemDiv);
         });
@@ -31,10 +33,31 @@ function updateCart() {
     calculateTotal();
 }
 
-// Remover item do carrinho
-function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
+// Diminui a quantidade
+function decreaseQuantity(id) {
+    const item = cart.find(item => item.id === id)
+    if (item) {
+        if (item.quantity > 1) {
+            item.quantity -= 1
+        } else if (item && item.quantity === 1) {
+            cart = cart.filter(item => item.id !== id);
+        }
+    }
     localStorage.setItem('carrinho', JSON.stringify(cart))
+    updateCartStorage();
+}
+
+// Aumenta a quantidade
+function increaseQuantity(id) {
+    const item = cart.find(item => item.id === id)
+    if (item) {
+        item.quantity += 1
+    }
+    updateCartStorage()
+}
+
+function updateCartStorage() {
+    localStorage.setItem('carrinho', JSON.stringify(cart));
     updateCart();
 }
 
